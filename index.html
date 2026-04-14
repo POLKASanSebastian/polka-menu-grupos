@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PÓLKA — Menús de Grupo</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1B2DC8;
+    --white: #FFFFFF;
+    --gray-text: #333333;
+    --badge-casa-bg: #E8E8E8;
+    --badge-casa-color: #555;
+    --badge-km0-bg: #C8F0D0;
+    --badge-km0-color: #1A7A3A;
+    --badge-veg-bg: #FFF3C0;
+    --badge-veg-color: #7A6000;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #F0F2FA;
+    font-family: 'Barlow', sans-serif;
+    color: var(--gray-text);
+    min-height: 100vh;
+    padding: 0 16px 48px;
+  }
+
+  .wrapper { max-width: 480px; margin: 0 auto; }
+
+  /* ── SELECTOR DE IDIOMA ── */
+  .lang-bar {
+    background: var(--blue);
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-left: 4px solid var(--blue);
+    border-right: 4px solid var(--blue);
+  }
+
+  .lang-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    padding: 6px 18px;
+    cursor: pointer;
+    transition: all .2s ease;
+    border-radius: 2px;
+  }
+
+  .lang-btn.active {
+    background: white;
+    color: var(--blue);
+    border-color: white;
+  }
+
+  .lang-btn:hover:not(.active) {
+    color: white;
+    border-color: rgba(255,255,255,0.5);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    padding: 32px 20px 24px;
+    background: white;
+    border-left: 4px solid var(--blue);
+    border-right: 4px solid var(--blue);
+    border-top: 4px solid var(--blue);
+  }
+
+  .header-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 64px;
+    font-weight: 800;
+    color: var(--blue);
+    letter-spacing: 4px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .header-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .header-tagline {
+    font-size: 13px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--blue);
+    opacity: 0.75;
+    line-height: 1.4;
+  }
+
+  /* ── CONDICIONES ── */
+  .condiciones {
+    background: var(--blue);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    border-left: 4px solid var(--blue);
+    border-right: 4px solid var(--blue);
+  }
+
+  .condicion-item {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .condicion-item + .condicion-item::before { content: '·'; opacity: 0.4; margin-right: 4px; }
+
+  .spacer { height: 12px; }
+
+  /* ── MENU CARD ── */
+  .menu-card {
+    background: white;
+    border: 2px solid var(--blue);
+    margin-bottom: 20px;
+  }
+
+  .section-header {
+    background: var(--blue);
+    padding: 13px 20px;
+    text-align: center;
+  }
+
+  .section-header-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: white;
+  }
+
+  .section-sub {
+    font-size: 12px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.7);
+    margin-top: 3px;
+  }
+
+  .price-block {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid #E8ECF8;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .price-main {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--blue);
+    line-height: 1;
+  }
+
+  .price-label { font-size: 13px; color: #888; }
+
+  .price-min {
+    margin-left: auto;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--blue);
+    border: 1px solid var(--blue);
+    padding: 4px 8px;
+    opacity: 0.7;
+  }
+
+  .course-block { border-bottom: 1px solid #E8ECF8; }
+  .course-block:last-of-type { border-bottom: none; }
+
+  .course-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--blue);
+    padding: 10px 20px 6px;
+    border-bottom: 1px solid #E8ECF8;
+    opacity: 0.7;
+  }
+
+  .dish { padding: 12px 20px; border-bottom: 1px solid #F0F2FA; }
+  .dish:last-of-type { border-bottom: none; }
+
+  .dish-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px; }
+
+  .dish-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    flex: 1;
+  }
+
+  .dish-badges { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 5px; }
+
+  .badge { font-size: 10px; font-weight: 500; letter-spacing: 0.5px; padding: 2px 7px; border-radius: 3px; }
+  .badge-km0  { background: var(--badge-km0-bg);  color: var(--badge-km0-color); }
+  .badge-veg  { background: var(--badge-veg-bg);  color: var(--badge-veg-color); }
+  .badge-casa { background: var(--badge-casa-bg); color: var(--badge-casa-color); }
+  .badge-nuevo { background: white; color: var(--blue); border: 1px solid var(--blue); }
+  .badge-star  { background: var(--blue); color: white; }
+
+  .dish-desc { font-size: 13px; font-weight: 300; color: var(--gray-text); line-height: 1.45; }
+
+  .elige-note { font-size: 12px; font-style: italic; color: #999; padding: 8px 20px 12px; }
+
+  .incluye-bar {
+    background: #EEF1FB;
+    padding: 11px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-top: 1px solid #D0D8F0;
+  }
+
+  .incluye-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--blue);
+  }
+
+  .incluye-text { font-size: 12px; color: #555; }
+
+  /* ── INFO ── */
+  .info-header {
+    background: var(--blue);
+    padding: 13px 20px;
+    text-align: center;
+    border: 2px solid var(--blue);
+    border-bottom: none;
+  }
+
+  .info-header-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: white;
+  }
+
+  .info-body {
+    background: white;
+    border: 2px solid var(--blue);
+    border-top: none;
+    margin-bottom: 20px;
+  }
+
+  .info-item { padding: 14px 20px; border-bottom: 1px solid #E8ECF8; display: flex; gap: 12px; align-items: flex-start; }
+  .info-item:last-child { border-bottom: none; }
+  .info-icon { font-size: 18px; line-height: 1; margin-top: 2px; }
+
+  .info-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .info-text { font-size: 13px; font-weight: 300; line-height: 1.4; }
+
+  /* ── CONTACTO ── */
+  .contact-card {
+    background: var(--blue);
+    border: 2px solid var(--blue);
+    padding: 28px 24px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .contact-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 10px;
+  }
+
+  .contact-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .contact-lines { display: flex; flex-direction: column; gap: 10px; text-align: left; }
+
+  .contact-line { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.8); display: flex; align-items: center; gap: 10px; }
+  .contact-line strong { font-weight: 600; color: white; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: white;
+    border: 2px solid var(--blue);
+    padding: 16px 20px;
+    text-align: center;
+  }
+
+  .reservar-btn {
+    display: block;
+    width: 100%;
+    background: white;
+    color: var(--blue);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    padding: 16px 20px;
+    margin-top: 20px;
+    transition: background .2s;
+  }
+
+  .reservar-btn:hover { background: rgba(255,255,255,0.85); }
+
+  .footer-brand {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--blue);
+    letter-spacing: 4px;
+    margin-bottom: 6px;
+  }
+
+  .footer-note { font-size: 11px; font-weight: 300; color: #888; line-height: 1.5; }
+
+  /* ── IDIOMAS: ocultar/mostrar ── */
+  .lang-es, .lang-fr, .lang-en { display: none; }
+  body.es .lang-es { display: block; }
+  body.fr .lang-fr { display: block; }
+  body.en .lang-en { display: block; }
+
+  .t { display: none !important; }
+  body.es .t-es { display: inline !important; }
+  body.fr .t-fr { display: inline !important; }
+  body.en .t-en { display: inline !important; }
+
+  .tb { display: none !important; }
+  body.es .tb-es { display: block !important; }
+  body.fr .tb-fr { display: block !important; }
+  body.en .tb-en { display: block !important; }
+</style>
+</head>
+<body class="es">
+<div class="wrapper">
+
+  <!-- SELECTOR -->
+  <div class="lang-bar">
+    <button class="lang-btn active" onclick="setLang('es')">🇪🇸 ES</button>
+    <button class="lang-btn" onclick="setLang('fr')">🇫🇷 FR</button>
+    <button class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-title">PÓLKA</div>
+    <div class="header-sub">San Sebastián · Plaza Sarriegi</div>
+    <div class="header-tagline">
+      <span class="t t-es">En la Plaza Sarriegi desde 1991 · Homenaje al maestro Raimundo Sarriegui Echeverría</span>
+      <span class="t t-fr">Sur la Plaza Sarriegi depuis 1991 · Hommage au maître Raimundo Sarriegui Echeverría</span>
+      <span class="t t-en">At Plaza Sarriegi since 1991 · A tribute to maestro Raimundo Sarriegui Echeverría</span>
+    </div>
+  </div>
+
+  <!-- CONDICIONES -->
+  <div class="condiciones">
+    <div class="condicion-item">
+      <span class="t t-es">Grupos de 8 a 10 personas</span>
+      <span class="t t-fr">Groupes de 8 à 10 personnes</span>
+      <span class="t t-en">Groups of 8 to 10 people</span>
+    </div>
+    <div class="condicion-item">
+      <span class="t t-es">Mesa completa</span>
+      <span class="t t-fr">Table entière</span>
+      <span class="t t-en">Full table</span>
+    </div>
+    <div class="condicion-item">
+      <span class="t t-es">Terraza disponible</span>
+      <span class="t t-fr">Terrasse disponible</span>
+      <span class="t t-en">Terrace available</span>
+    </div>
+    <div class="condicion-item">
+      <span class="t t-es">IVA incluido</span>
+      <span class="t t-fr">TVA incluse</span>
+      <span class="t t-en">VAT included</span>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- ══════════════════════════════ -->
+  <!-- MENÚ SARRIEGI -->
+  <!-- ══════════════════════════════ -->
+  <div class="menu-card">
+    <div class="section-header">
+      <div class="section-header-title">Menú "Sarriegi"</div>
+      <div class="section-sub">
+        <span class="t t-es">El sabor de la plaza, para compartir</span>
+        <span class="t t-fr">Le goût de la place, à partager</span>
+        <span class="t t-en">The flavour of the square, to share</span>
+      </div>
+    </div>
+
+    <div class="price-block">
+      <div class="price-main">32€</div>
+      <div class="price-label">
+        <span class="t t-es">por persona</span>
+        <span class="t t-fr">par personne</span>
+        <span class="t t-en">per person</span>
+      </div>
+      <div class="price-min">8–10 pax</div>
+    </div>
+
+    <!-- COMPARTIBLES -->
+    <div class="course-block">
+      <div class="course-label">
+        <span class="t t-es">Para compartir — un plato de cada elaboración por mesa</span>
+        <span class="t t-fr">À partager — un plat de chaque préparation par table</span>
+        <span class="t t-en">To share — one dish of each preparation per table</span>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">"La Polka Rusa"</div></div>
+        <div class="dish-badges"><span class="badge badge-casa">CASA</span><span class="badge badge-km0">KM0</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Ensaladilla km0, piparras, ventresca, boniato y mahonesa de ventresca.</span>
+          <span class="t t-fr">Salade russe km0, piparras, ventrèche, patate douce et mayonnaise de ventrèche.</span>
+          <span class="t t-en">Km0 Russian salad, piparras, tuna belly, sweet potato and tuna mayo.</span>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Croquetas de Ropa Vieja y Jamón</div></div>
+        <div class="dish-badges"><span class="badge badge-casa">CASA</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Con reducción de tomate.</span>
+          <span class="t t-fr">Avec réduction de tomate.</span>
+          <span class="t t-en">With tomato reduction.</span>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Aritos de Txipiron</div></div>
+        <div class="dish-badges"><span class="badge badge-km0">KM0</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Rebozados con harina de trigo y garbanzos, mahonesa de lima-limón.</span>
+          <span class="t t-fr">Panés à la farine de blé et pois chiches, mayonnaise citron vert.</span>
+          <span class="t t-en">Battered in wheat and chickpea flour, lime-lemon mayo.</span>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Bravas de Raimundo</div></div>
+        <div class="dish-badges"><span class="badge badge-casa">CASA</span><span class="badge badge-km0">KM0</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Gajos de patata, salsa chipotle, mayonesa de ajos y jalapeño.</span>
+          <span class="t t-fr">Quartiers de pomme de terre, sauce chipotle, mayo à l'ail et jalapeño.</span>
+          <span class="t t-en">Potato wedges, chipotle sauce, garlic mayo and jalapeño.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRINCIPAL -->
+    <div class="course-block">
+      <div class="course-label">
+        <span class="t t-es">Principal — cada comensal elige el suyo</span>
+        <span class="t t-fr">Plat principal — chaque convive choisit le sien</span>
+        <span class="t t-en">Main course — each guest chooses their own</span>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Txipirones "Pelatinta"</div></div>
+        <div class="dish-desc">
+          <span class="t t-es">Guisados en su tinta, arroz basmati, cebolla caramelizada y mahonesa de ajos.</span>
+          <span class="t t-fr">Cuits dans leur encre, riz basmati, oignon caramélisé et mayo à l'ail.</span>
+          <span class="t t-en">Stewed in their ink, basmati rice, caramelised onion and garlic mayo.</span>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Wok Lumagorri Tandoori</div></div>
+        <div class="dish-badges"><span class="badge badge-km0">KM0</span><span class="badge badge-nuevo">NEW</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Pollo Lumagorri en especias tandoori, fideos soba, pimiento de Gernika y txakoli.</span>
+          <span class="t t-fr">Poulet Lumagorri aux épices tandoori, nouilles soba, poivron de Gernika et txakoli.</span>
+          <span class="t t-en">Lumagorri chicken in tandoori spices, soba noodles, Gernika pepper and txakoli.</span>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Lomo de Bakalao "Chipo-Arriero"</div></div>
+        <div class="dish-desc">
+          <span class="t t-es">250g de bacalao con salsa ajoarriero y un toque chipotle.</span>
+          <span class="t t-fr">250g de morue avec sauce ajoarriero et une touche chipotle.</span>
+          <span class="t t-en">250g of salt cod with ajoarriero sauce and a chipotle touch.</span>
+        </div>
+      </div>
+      <div class="elige-note">
+        <span class="t t-es">El organizador nos indica la elección de cada comensal al confirmar. Así garantizamos un servicio ágil para todo el grupo.</span>
+        <span class="t t-fr">L'organisateur nous indique le choix de chaque convive à la confirmation. Cela garantit un service fluide pour tout le groupe.</span>
+        <span class="t t-en">The organiser confirms each guest's choice when booking. This ensures smooth service for the whole group.</span>
+      </div>
+    </div>
+
+    <!-- POSTRE -->
+    <div class="course-block">
+      <div class="course-label">
+        <span class="t t-es">Postre — cada comensal elige el suyo</span>
+        <span class="t t-fr">Dessert — chaque convive choisit le sien</span>
+        <span class="t t-en">Dessert — each guest chooses their own</span>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Cheesecake</div></div>
+        <div class="dish-badges"><span class="badge badge-casa">CASA</span><span class="badge badge-veg">VEG</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Nuestra tarta cremosa de queso Donostiarra mundialmente famosa.</span>
+          <span class="t t-fr">Notre célèbre tarte crémeuse au fromage de Donostia.</span>
+          <span class="t t-en">Our world-famous creamy Donostia cheesecake.</span>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Txokolatea</div></div>
+        <div class="dish-badges"><span class="badge badge-veg">VEG</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Bizcocho de chocolate templado, crema de maracuyá y salsa de cacao.</span>
+          <span class="t t-fr">Gâteau au chocolat tiède, crème de fruit de la passion et sauce cacao.</span>
+          <span class="t t-en">Warm chocolate cake, passion fruit cream and cocoa sauce.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="incluye-bar">
+      <span class="incluye-label">
+        <span class="t t-es">Incluye</span>
+        <span class="t t-fr">Inclus</span>
+        <span class="t t-en">Includes</span>
+      </span>
+      <span class="incluye-text">
+        <span class="t t-es">Agua · Refresco o txakoli de la casa</span>
+        <span class="t t-fr">Eau · Boisson ou txakoli de la maison</span>
+        <span class="t t-en">Water · Soft drink or house txakoli</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ -->
+  <!-- MENÚ PLAZA -->
+  <!-- ══════════════════════════════ -->
+  <div class="menu-card">
+    <div class="section-header">
+      <div class="section-header-title">Menú "Plaza"</div>
+      <div class="section-sub">
+        <span class="t t-es">La experiencia completa de Pólka</span>
+        <span class="t t-fr">L'expérience complète de Pólka</span>
+        <span class="t t-en">The full Pólka experience</span>
+      </div>
+    </div>
+
+    <div class="price-block">
+      <div class="price-main">45€</div>
+      <div class="price-label">
+        <span class="t t-es">por persona</span>
+        <span class="t t-fr">par personne</span>
+        <span class="t t-en">per person</span>
+      </div>
+      <div class="price-min">8–10 pax</div>
+    </div>
+
+    <!-- COMPARTIBLES -->
+    <div class="course-block">
+      <div class="course-label">
+        <span class="t t-es">Para compartir — un plato de cada elaboración por mesa</span>
+        <span class="t t-fr">À partager — un plat de chaque préparation par table</span>
+        <span class="t t-en">To share — one dish of each preparation per table</span>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Tabla Antipasta</div></div>
+        <div class="dish-badges"><span class="badge badge-casa">CASA</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Variedad de quesos Euskaldunes, chorizo, salchichón, jamón ibérico, aceitunas y patatas.</span>
+          <span class="t t-fr">Assortiment de fromages basques, chorizo, saucisson, jambon ibérique, olives et pommes de terre.</span>
+          <span class="t t-en">Selection of Basque cheeses, chorizo, salchichón, Iberian ham, olives and potatoes.</span>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Mejillones al Txakoli con Crema de Idiazábal</div></div>
+        <div class="dish-badges"><span class="badge badge-nuevo">NEW</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Abiertos al vapor con txakoli, piparra encurtida y pan de la casa.</span>
+          <span class="t t-fr">Cuits à la vapeur au txakoli, piparra marinée et pain maison.</span>
+          <span class="t t-en">Steamed with txakoli, pickled piparra and house bread.</span>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Antxoas Marinadas</div></div>
+        <div class="dish-badges"><span class="badge badge-casa">CASA</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Boquerones de la casa, vinagreta de pimientos y aceite de oliva.</span>
+          <span class="t t-fr">Anchois maison, vinaigrette de poivrons et huile d'olive.</span>
+          <span class="t t-en">House anchovies, pepper vinaigrette and olive oil.</span>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Nachos "Batzuk"</div></div>
+        <div class="dish-badges"><span class="badge badge-casa">CASA</span><span class="badge badge-veg">VEG</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Fritos en casa, salsa vizcaína tuneada, ajoarriero, crema de aguacate, alubia roja.</span>
+          <span class="t t-fr">Frits maison, sauce vizcaína revisitée, ajoarriero, crème d'avocat, haricot rouge.</span>
+          <span class="t t-en">House-fried, tuned vizcaína sauce, ajoarriero, avocado cream, red bean.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRINCIPAL -->
+    <div class="course-block">
+      <div class="course-label">
+        <span class="t t-es">Principal — cada comensal elige el suyo</span>
+        <span class="t t-fr">Plat principal — chaque convive choisit le sien</span>
+        <span class="t t-en">Main course — each guest chooses their own</span>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Magret de Pato</div></div>
+        <div class="dish-badges"><span class="badge badge-star">★ Especial</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Pechuga de pato, chutney de mango, boniato frito y ensalada.</span>
+          <span class="t t-fr">Magret de canard, chutney de mangue, patate douce frite et salade.</span>
+          <span class="t t-en">Duck breast, mango chutney, fried sweet potato and salad.</span>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Lomo de Bakalao "Chipo-Arriero"</div></div>
+        <div class="dish-desc">
+          <span class="t t-es">250g de bacalao con salsa ajoarriero y un toque chipotle.</span>
+          <span class="t t-fr">250g de morue avec sauce ajoarriero et une touche chipotle.</span>
+          <span class="t t-en">250g of salt cod with ajoarriero sauce and a chipotle touch.</span>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Wok Lumagorri Tandoori</div></div>
+        <div class="dish-badges"><span class="badge badge-km0">KM0</span><span class="badge badge-nuevo">NEW</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Pollo Lumagorri en especias tandoori, fideos soba, pimiento de Gernika y txakoli.</span>
+          <span class="t t-fr">Poulet Lumagorri aux épices tandoori, nouilles soba, poivron de Gernika et txakoli.</span>
+          <span class="t t-en">Lumagorri chicken in tandoori spices, soba noodles, Gernika pepper and txakoli.</span>
+        </div>
+      </div>
+      <div class="elige-note">
+        <span class="t t-es">El organizador nos indica la elección de cada comensal al confirmar. Así garantizamos un servicio ágil para todo el grupo.</span>
+        <span class="t t-fr">L'organisateur nous indique le choix de chaque convive à la confirmation. Cela garantit un service fluide pour tout le groupe.</span>
+        <span class="t t-en">The organiser confirms each guest's choice when booking. This ensures smooth service for the whole group.</span>
+      </div>
+    </div>
+
+    <!-- POSTRE -->
+    <div class="course-block">
+      <div class="course-label">
+        <span class="t t-es">Postre — cada comensal elige el suyo</span>
+        <span class="t t-fr">Dessert — chaque convive choisit le sien</span>
+        <span class="t t-en">Dessert — each guest chooses their own</span>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Torrija &amp; Mamia</div></div>
+        <div class="dish-badges"><span class="badge badge-nuevo">NEW</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Pan brioche tostado, helado de Mamia y caramelo de sidra.</span>
+          <span class="t t-fr">Pain brioché grillé, glace Mamia et caramel au cidre.</span>
+          <span class="t t-en">Toasted brioche, Mamia ice cream and cider caramel.</span>
+        </div>
+      </div>
+      <div class="dish">
+        <div class="dish-top"><div class="dish-name">Tabla Sagardotegi</div></div>
+        <div class="dish-badges"><span class="badge badge-veg">VEG</span></div>
+        <div class="dish-desc">
+          <span class="t t-es">Queso Idiazábal, nueces, membrillo y manzanas en almíbar.</span>
+          <span class="t t-fr">Fromage Idiazábal, noix, coing et pommes au sirop.</span>
+          <span class="t t-en">Idiazábal cheese, walnuts, quince and apples in syrup.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="incluye-bar">
+      <span class="incluye-label">
+        <span class="t t-es">Incluye</span>
+        <span class="t t-fr">Inclus</span>
+        <span class="t t-en">Includes</span>
+      </span>
+      <span class="incluye-text">
+        <span class="t t-es">Agua · Vino de la casa o txakoli · Café</span>
+        <span class="t t-fr">Eau · Vin maison ou txakoli · Café</span>
+        <span class="t t-en">Water · House wine or txakoli · Coffee</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- INFO -->
+  <div class="info-header">
+    <div class="info-header-title">
+      <span class="t t-es">Cómo funciona</span>
+      <span class="t t-fr">Comment ça marche</span>
+      <span class="t t-en">How it works</span>
+    </div>
+  </div>
+  <div class="info-body">
+    <div class="info-item">
+      <div class="info-icon">🗓</div>
+      <div>
+        <div class="info-title">
+          <span class="t t-es">Reserva</span>
+          <span class="t t-fr">Réservation</span>
+          <span class="t t-en">Booking</span>
+        </div>
+        <div class="info-text">
+          <span class="t t-es">Confirmación con 48h de antelación. Mesa completa para el grupo (8-10 personas). Los compartibles llegan para todos. El organizador nos indica el principal y postre de cada comensal al reservar.</span>
+          <span class="t t-fr">Confirmation 48h à l'avance. Table entière pour le groupe (8-10 personnes). Les plats à partager arrivent pour tous. L'organisateur nous indique le choix du plat et du dessert de chaque convive lors de la réservation.</span>
+          <span class="t t-en">Confirmation 48h in advance. Full table for the group (8-10 people). Sharing dishes arrive for everyone. The organiser lets us know each guest's main and dessert choice when booking.</span>
+        </div>
+      </div>
+    </div>
+    <div class="info-item">
+      <div class="info-icon">🌿</div>
+      <div>
+        <div class="info-title">
+          <span class="t t-es">Terraza</span>
+          <span class="t t-fr">Terrasse</span>
+          <span class="t t-en">Terrace</span>
+        </div>
+        <div class="info-text">
+          <span class="t t-es">Disponible para grupos en la Plaza Sarriegi. Consultar disponibilidad y capacidad.</span>
+          <span class="t t-fr">Disponible pour les groupes sur la Plaza Sarriegi. Disponibilité et capacité à confirmer.</span>
+          <span class="t t-en">Available for groups at Plaza Sarriegi. Please check availability and capacity.</span>
+        </div>
+      </div>
+    </div>
+    <div class="info-item">
+      <div class="info-icon">🍷</div>
+      <div>
+        <div class="info-title">
+          <span class="t t-es">Vinos &amp; Polktails</span>
+          <span class="t t-fr">Vins &amp; Polktails</span>
+          <span class="t t-en">Wines &amp; Polktails</span>
+        </div>
+        <div class="info-text">
+          <span class="t t-es">Carta de vinos y cócteles disponible. Maridaje personalizado para grupos bajo consulta.</span>
+          <span class="t t-fr">Carte des vins et cocktails disponible. Accord mets-vins personnalisé pour les groupes sur demande.</span>
+          <span class="t t-en">Wine and cocktail menu available. Personalised pairing for groups on request.</span>
+        </div>
+      </div>
+    </div>
+    <div class="info-item">
+      <div class="info-icon">♿</div>
+      <div>
+        <div class="info-title">
+          <span class="t t-es">Alérgenos</span>
+          <span class="t t-fr">Allergènes</span>
+          <span class="t t-en">Allergens</span>
+        </div>
+        <div class="info-text">
+          <span class="t t-es">Información de alérgenos disponible bajo petición. Adaptaciones posibles con antelación.</span>
+          <span class="t t-fr">Informations sur les allergènes disponibles sur demande. Adaptations possibles à l'avance.</span>
+          <span class="t t-en">Allergen information available on request. Adaptations possible with advance notice.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACTO -->
+  <div class="contact-card">
+    <div class="contact-eyebrow">
+      <span class="t t-es">Reservas y consultas</span>
+      <span class="t t-fr">Réservations et renseignements</span>
+      <span class="t t-en">Bookings and enquiries</span>
+    </div>
+    <div class="contact-title">
+      <span class="t t-es">Cuéntanos cómo quieres celebrarlo</span>
+      <span class="t t-fr">Dites-nous comment vous souhaitez le fêter</span>
+      <span class="t t-en">Tell us how you'd like to celebrate</span>
+    </div>
+    <div class="contact-lines">
+      <div class="contact-line">📍 <strong>Sarriegi Plaza, 7</strong> · 20003 Donostia / San Sebastián</div>
+      <div class="contact-line">📞 <strong>943 10 04 69</strong></div>
+      <div class="contact-line">✉️ <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bbd2d5ddd4fbcbd4d7d0dac8dad5c8ded9dac8cfd2dad595d8d4d6">[email&#160;protected]</a></strong></div>
+      <div class="contact-line">🌐 <strong>polkasansebastian.com</strong></div>
+    </div>
+    <a href="https://calendly.com/f-lizarraga/reserva-menu-grupos-polka" target="_blank" class="reservar-btn">
+      <span class="t t-es">📅 Reservar ahora</span>
+      <span class="t t-fr">📅 Réserver maintenant</span>
+      <span class="t t-en">📅 Book now</span>
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-brand">PÓLKA</div>
+    <div class="footer-note">
+      <span class="t t-es">Todos los precios incluyen IVA · 10% de suplemento en terraza · Alérgenos bajo petición · San Sebastián 2026</span>
+      <span class="t t-fr">Tous les prix incluent la TVA · Supplément de 10% en terrasse · Allergènes sur demande · Saint-Sébastien 2026</span>
+      <span class="t t-en">All prices include VAT · 10% surcharge on terrace · Allergens on request · San Sebastián 2026</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function setLang(lang) {
+    document.body.className = lang;
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+      btn.classList.remove('active');
+    });
+    document.querySelector('[onclick="setLang(\'' + lang + '\')"]').classList.add('active');
+    document.documentElement.lang = lang;
+  }
+</script>
+</body>
+</html>
