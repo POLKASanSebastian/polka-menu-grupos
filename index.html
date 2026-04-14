@@ -34,7 +34,8 @@
   .lang-bar {
     background: var(--blue);
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
     gap: 4px;
     padding: 10px 20px;
     position: sticky;
@@ -43,6 +44,63 @@
     border-left: 4px solid var(--blue);
     border-right: 4px solid var(--blue);
   }
+
+  .lang-btns {
+    display: flex;
+    gap: 4px;
+  }
+
+  /* BOTÓN FIJO ABAJO */
+  .reservar-float {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    background: var(--blue);
+    text-align: center;
+    padding: 0;
+    z-index: 200;
+    border-top: 3px solid white;
+  }
+
+  .reservar-float a {
+    display: block;
+    width: 100%;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: white;
+    text-decoration: none;
+    padding: 16px 20px;
+    transition: background .2s;
+  }
+
+  .reservar-float a:hover { background: rgba(255,255,255,0.1); }
+
+  /* espacio para que el float no tape el footer */
+  .bottom-spacer { height: 60px; }
+  .reservar-sticky {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--blue);
+    background: white;
+    border: none;
+    padding: 7px 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    white-space: nowrap;
+    transition: background .2s;
+  }
+
+  .reservar-sticky:hover { background: rgba(255,255,255,0.85); }
 
   .lang-btn {
     font-family: 'Barlow Condensed', sans-serif;
@@ -396,9 +454,16 @@
 
   <!-- SELECTOR -->
   <div class="lang-bar">
-    <button class="lang-btn active" onclick="setLang('es')">🇪🇸 ES</button>
-    <button class="lang-btn" onclick="setLang('fr')">🇫🇷 FR</button>
-    <button class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
+    <div class="lang-btns">
+      <button class="lang-btn active" onclick="setLang('es')">🇪🇸 ES</button>
+      <button class="lang-btn" onclick="setLang('fr')">🇫🇷 FR</button>
+      <button class="lang-btn" onclick="setLang('en')">🇬🇧 EN</button>
+    </div>
+    <a href="https://calendly.com/f-lizarraga/reserva-menu-grupos-polka" target="_blank" class="reservar-sticky">
+      <span class="t t-es">📅 Reservar</span>
+      <span class="t t-fr">📅 Réserver</span>
+      <span class="t t-en">📅 Book</span>
+    </a>
   </div>
 
   <!-- HEADER -->
@@ -841,8 +906,18 @@
     </div>
   </div>
 
+  <div class="bottom-spacer"></div>
+
 </div>
 
+<!-- BOTÓN FLOTANTE ABAJO -->
+<div class="reservar-float">
+  <a href="https://calendly.com/f-lizarraga/reserva-menu-grupos-polka" target="_blank">
+    <span class="t t-es">📅 Reservar ahora</span>
+    <span class="t t-fr">📅 Réserver maintenant</span>
+    <span class="t t-en">📅 Book now</span>
+  </a>
+</div>
 <script>
   function setLang(lang) {
     document.body.className = lang;
